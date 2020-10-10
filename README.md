@@ -8,14 +8,27 @@ A Multiplayer Chess Game.
 
 ## How to Run
 
-```
-dotnet restore
-cd src/MultiplayerChessGame.Server
-dotnet run
-cd ../MultiplayerChessGame.Client
-dotnet run
-dotnet run
-```
+1. Start the first shell to run the server:
+
+    ```
+    dotnet restore
+    cd src/MultiplayerChessGame.Server
+    dotnet run
+    ```
+
+1. Start the second shell to run one client:
+
+    ```
+    cd src/MultiplayerChessGame.Client
+    dotnet run
+    ```
+
+1. Start the third shell to run the other client:
+
+    ```
+    cd src/MultiplayerChessGame.Client
+    dotnet run
+    ```
 
 ## How to Play
 
