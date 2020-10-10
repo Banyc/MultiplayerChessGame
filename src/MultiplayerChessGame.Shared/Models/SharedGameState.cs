@@ -24,13 +24,16 @@ namespace MultiplayerChessGame.Shared.Models
 
         public void UndoHistory()
         {
-            if (this.BoardHistory.Count == 0)
+            lock (this)
             {
-                return;
+                if (this.BoardHistory.Count == 0)
+                {
+                    return;
+                }
+                string previousBoard = this.BoardHistory.Pop();
+                this.Board = Newtonsoft.Json.JsonConvert.DeserializeObject<GameBoard>(previousBoard);
+                this.Step--;
             }
-            string previousBoard = this.BoardHistory.Pop();
-            this.Board = Newtonsoft.Json.JsonConvert.DeserializeObject<GameBoard>(previousBoard);
-            this.Step--;
         }
 
         public void OverwriteState(SharedGameState state)
