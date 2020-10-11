@@ -21,6 +21,9 @@ namespace MultiplayerChessGame.Client
         private Vector2 _chessGrillePosition = Vector2.Zero;
         private Texture2D _chessGrille;
         private Texture2D _selectionSquare;
+        private Texture2D _chessMoveSourceSquare;
+        private Texture2D _chessMoveDestinationSquare;
+        private Texture2D _newChessSquare;
         private Point _selectionLogicPosition = Point.Zero;
         private Point? _selectedLogicalPosition = null;
         private PlayerSide _playerSide = PlayerSide.White;
@@ -41,6 +44,14 @@ namespace MultiplayerChessGame.Client
             {
                 int selectionTextureHeight = this.GrilleTextureActualHeight / 8;
                 return (float)selectionTextureHeight / _selectionSquare.Height;
+            }
+        }
+        private float NewChessSquareTextureScale
+        {
+            get
+            {
+                int squareTextureHeight = this.GrilleTextureActualHeight / 8;
+                return (float)squareTextureHeight / _newChessSquare.Height;
             }
         }
         private int GrilleTextureActualWidth
@@ -83,6 +94,9 @@ namespace MultiplayerChessGame.Client
             _chessGrille = this.Content.Load<Texture2D>("chessgrille");
             Texture2D chessPieces = this.Content.Load<Texture2D>("chesspieces");
             _selectionSquare = this.Content.Load<Texture2D>("selected");
+            _chessMoveSourceSquare = this.Content.Load<Texture2D>("purpleSquare");
+            _chessMoveDestinationSquare = this.Content.Load<Texture2D>("purpleSquare");
+            _newChessSquare = this.Content.Load<Texture2D>("blueSquare");
 
             // cut chess pieces
             const int numPiecesX = 6;
@@ -158,6 +172,24 @@ namespace MultiplayerChessGame.Client
             // selection square
             _spriteBatch.Draw(_selectionSquare, GetActualPositionInGrille(_selectionLogicPosition), null, Color.White, 0f,
                             Vector2.Zero, this.SelectionTextureScale, SpriteEffects.None, 0f);
+            // new chess location
+            if (_state.Board.NewChessLocation != null)
+            {
+                _spriteBatch.Draw(_newChessSquare, GetActualPositionInGrille(_state.Board.NewChessLocation.Value), null, Color.White, 0f,
+                                Vector2.Zero, this.NewChessSquareTextureScale, SpriteEffects.None, 0f);
+            }
+            // chess move previous location
+            if (_state.Board.PreviousLocation != null)
+            {
+                _spriteBatch.Draw(_chessMoveSourceSquare, GetActualPositionInGrille(_state.Board.PreviousLocation.Value), null, Color.White, 0f,
+                                Vector2.Zero, this.NewChessSquareTextureScale, SpriteEffects.None, 0f);
+            }
+            // chess move current location
+            if (_state.Board.CurrentLocation != null)
+            {
+                _spriteBatch.Draw(_chessMoveDestinationSquare, GetActualPositionInGrille(_state.Board.CurrentLocation.Value), null, Color.White, 0f,
+                                Vector2.Zero, this.NewChessSquareTextureScale, SpriteEffects.None, 0f);
+            }
 
             _spriteBatch.End();
 
@@ -194,6 +226,11 @@ namespace MultiplayerChessGame.Client
             }
         }
 
+        private Vector2 GetActualPositionInGrille(System.Drawing.Point logicalPosition)
+        {
+            Point point = new Point(logicalPosition.X, logicalPosition.Y);
+            return GetActualPositionInGrille(point);
+        }
         private Vector2 GetActualPositionInGrille(Point logicalPosition)
         {
             Vector2 offsetPositionToGrille = new Vector2(
