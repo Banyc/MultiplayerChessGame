@@ -12,14 +12,20 @@ namespace MultiplayerChessGame.Shared.Models
 
         public void AddChessMove(ChessMove chessMove)
         {
-            SaveHistory();
-            this.Board.AddChessMove(chessMove);
+            lock (this)
+            {
+                SaveHistory();
+                this.Board.AddChessMove(chessMove);
+            }
         }
 
         public void AddChessChange(ChessChange chessChange)
         {
-            SaveHistory();
-            this.Board.AddChessChange(chessChange);
+            lock (this)
+            {
+                SaveHistory();
+                this.Board.AddChessChange(chessChange);
+            }
         }
 
         public void UndoHistory()
