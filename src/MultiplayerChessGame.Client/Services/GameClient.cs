@@ -8,6 +8,7 @@ using System.Threading;
 using MultiplayerChessGame.Shared.Models;
 using TcpClient = NetCoreServer.TcpClient;
 using MultiplayerChessGame.Shared.Helpers;
+using System.Collections.Generic;
 
 namespace MultiplayerChessGame.Client.Services
 {
@@ -71,6 +72,8 @@ namespace MultiplayerChessGame.Client.Services
             {
                 case RemoteInstructionType.PushSharedGameState:
                     PushSharedGameState pushInstruction = Newtonsoft.Json.JsonConvert.DeserializeObject<PushSharedGameState>(Encoding.UTF8.GetString(frame));
+                    // Newtonsoft.Json does not deserialize properly, so to reverse the stack explicitly.
+                    pushInstruction.SharedGameState.BoardHistory = new Stack<string>(pushInstruction.SharedGameState.BoardHistory);
                     _gameState.OverwriteState(pushInstruction.SharedGameState);
                     break;
             }
