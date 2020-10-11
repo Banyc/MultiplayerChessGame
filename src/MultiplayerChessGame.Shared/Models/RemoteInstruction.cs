@@ -7,6 +7,7 @@ namespace MultiplayerChessGame.Shared.Models
         PullSharedGameState,
         PushSharedGameState,
         UndoChessBoard,
+        RedoChessBoard,
     }
 
     public class RemoteInstruction

@@ -289,6 +289,25 @@ namespace MultiplayerChessGame.Client
             }
         }
 
+        private void HandleRedoChessBoard(Keys key)
+        {
+            if (!KeyboardHelper.HasBeenPressed(key))
+            {
+                return;
+            }
+            switch (key)
+            {
+                case Keys.OemPlus:
+                    RemoteInstruction instruction = new RemoteInstruction()
+                    {
+                        Type = RemoteInstructionType.RedoChessBoard
+                    };
+                    _client.Client.Send(instruction);
+                    // _state.RedoHistory();
+                    break;
+            }
+        }
+
         private void HandleSwitchSide(Keys key)
         {
             if (!KeyboardHelper.HasBeenPressed(key))

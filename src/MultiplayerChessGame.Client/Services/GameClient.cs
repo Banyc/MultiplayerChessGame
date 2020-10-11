@@ -74,6 +74,7 @@ namespace MultiplayerChessGame.Client.Services
                     PushSharedGameState pushInstruction = Newtonsoft.Json.JsonConvert.DeserializeObject<PushSharedGameState>(Encoding.UTF8.GetString(frame));
                     // Newtonsoft.Json does not deserialize properly, so to reverse the stack explicitly.
                     pushInstruction.SharedGameState.BoardHistory = new Stack<string>(pushInstruction.SharedGameState.BoardHistory);
+                    pushInstruction.SharedGameState.BoardRedo = new Stack<string>(pushInstruction.SharedGameState.BoardRedo);
                     _gameState.OverwriteState(pushInstruction.SharedGameState);
                     break;
             }

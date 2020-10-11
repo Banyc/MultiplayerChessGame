@@ -36,6 +36,7 @@ namespace MultiplayerChessGame.Shared.Helpers
                     rawBytes = Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject((PushSharedGameState)instruction));
                     break;
                 case RemoteInstructionType.UndoChessBoard:
+                case RemoteInstructionType.RedoChessBoard:
                     rawBytes = Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(instruction));
                     break;
             }
@@ -72,6 +73,9 @@ namespace MultiplayerChessGame.Shared.Helpers
                             break;
                         case RemoteInstructionType.UndoChessBoard:
                             _gameState.UndoHistory();
+                            break;
+                        case RemoteInstructionType.RedoChessBoard:
+                            _gameState.RedoHistory();
                             break;
                         default:
                             otherwise?.Invoke(frame);

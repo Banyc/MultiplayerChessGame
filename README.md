@@ -42,4 +42,6 @@ A Multiplayer Chess Game.
 - Change side
     - `0`
 - Undo
-    - back
+    - backspace
+- Redo
+    - `+` (the key that has a lower case `=`)

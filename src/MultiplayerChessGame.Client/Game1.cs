@@ -141,6 +141,8 @@ namespace MultiplayerChessGame.Client
                 HandleChessChangeKey(key);
                 // undo
                 HandleUndoChessBoard(key);
+                // redo
+                HandleRedoChessBoard(key);
                 // switch side
                 HandleSwitchSide(key);
             }
