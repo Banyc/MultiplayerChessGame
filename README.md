@@ -4,7 +4,7 @@ A Multiplayer Chess Game.
 
 ## Screenshot
 
-![](img/2020-10-11-00-28-42.png)
+![](img/2020-10-11-15-51-22.png)
 
 ## How to Run
 
