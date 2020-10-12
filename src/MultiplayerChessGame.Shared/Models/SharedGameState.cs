@@ -16,9 +16,16 @@ namespace MultiplayerChessGame.Shared.Models
             lock (this)
             {
                 SaveHistory();
-                this.Board.AddChessMove(chessMove);
-                // we are in the new branch of history, the old history should be removed
-                this.BoardRedo.Clear();
+                try
+                {
+                    this.Board.AddChessMove(chessMove);
+                    // we are in the new branch of history, the old history should be removed
+                    this.BoardRedo.Clear();
+                }
+                catch (InvalidChessOperation)
+                {
+                    UndoHistory();
+                }
             }
         }
 

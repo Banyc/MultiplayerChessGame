@@ -1,8 +1,24 @@
+using System.Runtime.CompilerServices;
 using System;
 using System.Drawing;
 using System.Collections.Generic;
 namespace MultiplayerChessGame.Shared.Models
 {
+    public class InvalidChessOperation : Exception
+    {
+        public InvalidChessOperation() : base()
+        {
+        }
+
+        public InvalidChessOperation(string message) : base(message)
+        {
+        }
+
+        public InvalidChessOperation(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+    }
+
     public class GameBoard
     {
         public Dictionary<Point, Chess> LocationChess { get; set; }
@@ -16,7 +32,8 @@ namespace MultiplayerChessGame.Shared.Models
         {
             if (!this.LocationChess.ContainsKey(chessMove.From))
             {
-                return;
+                throw new InvalidChessOperation();
+                // return;
             }
             Chess movingChess = this.LocationChess[chessMove.From];
             this.LocationChess.Remove(chessMove.From);
