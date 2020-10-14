@@ -45,3 +45,9 @@ A Multiplayer Chess Game.
     - backspace
 - Redo
     - `+` (the key that has a lower case `=`)
+
+## TODO
+
+- [x] Add full chess rules
+- [ ] Apply mutex on `SharedGameState`
+- [ ] Support multi-room

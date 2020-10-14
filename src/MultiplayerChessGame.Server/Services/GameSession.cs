@@ -70,6 +70,7 @@ namespace MultiplayerChessGame.Server.Services
 
         private void PushSharedGameState()
         {
+            while (!_gameManager.SharedGameState.Board.Availability) { }
             PushSharedGameState pushInstruction = new PushSharedGameState()
             {
                 SharedGameState = _gameManager.SharedGameState,

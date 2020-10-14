@@ -174,23 +174,35 @@ namespace MultiplayerChessGame.Client
             // selection square
             _spriteBatch.Draw(_selectionSquare, GetActualPositionInGrille(_selectionLogicPosition), null, Color.White, 0f,
                             Vector2.Zero, this.SelectionTextureScale, SpriteEffects.None, 0f);
-            // new chess location
-            if (_state.Board.NewChessLocation != null)
+
+            if (_state.Board.Availability)
             {
-                _spriteBatch.Draw(_newChessSquare, GetActualPositionInGrille(_state.Board.NewChessLocation.Value), null, Color.White, 0f,
-                                Vector2.Zero, this.NewChessSquareTextureScale, SpriteEffects.None, 0f);
-            }
-            // chess move previous location
-            if (_state.Board.PreviousLocation != null)
-            {
-                _spriteBatch.Draw(_chessMoveSourceSquare, GetActualPositionInGrille(_state.Board.PreviousLocation.Value), null, Color.White, 0f,
-                                Vector2.Zero, this.NewChessSquareTextureScale, SpriteEffects.None, 0f);
-            }
-            // chess move current location
-            if (_state.Board.CurrentLocation != null)
-            {
-                _spriteBatch.Draw(_chessMoveDestinationSquare, GetActualPositionInGrille(_state.Board.CurrentLocation.Value), null, Color.White, 0f,
-                                Vector2.Zero, this.NewChessSquareTextureScale, SpriteEffects.None, 0f);
+                _state.Board.Availability = false;
+                try
+                {
+                    // new chess location
+                    if (_state.Board.NewChessLocation != null)
+                    {
+                        _spriteBatch.Draw(_newChessSquare, GetActualPositionInGrille(_state.Board.NewChessLocation.Value), null, Color.White, 0f,
+                                        Vector2.Zero, this.NewChessSquareTextureScale, SpriteEffects.None, 0f);
+                    }
+                    // chess move previous location
+                    if (_state.Board.PreviousLocation != null)
+                    {
+                        _spriteBatch.Draw(_chessMoveSourceSquare, GetActualPositionInGrille(_state.Board.PreviousLocation.Value), null, Color.White, 0f,
+                                        Vector2.Zero, this.NewChessSquareTextureScale, SpriteEffects.None, 0f);
+                    }
+                    // chess move current location
+                    if (_state.Board.CurrentLocation != null)
+                    {
+                        _spriteBatch.Draw(_chessMoveDestinationSquare, GetActualPositionInGrille(_state.Board.CurrentLocation.Value), null, Color.White, 0f,
+                                        Vector2.Zero, this.NewChessSquareTextureScale, SpriteEffects.None, 0f);
+                    }
+                }
+                finally
+                {
+                    _state.Board.Availability = true;
+                }
             }
 
             _spriteBatch.End();
@@ -200,9 +212,14 @@ namespace MultiplayerChessGame.Client
 
         private void UpdateChessPositions()
         {
-            _chessPiecesPositions.Clear();
+            if (!_state.Board.Availability)
+            {
+                return;
+            }
+            _state.Board.Availability = false;
             try
             {
+                _chessPiecesPositions.Clear();
                 foreach (var item in _state.Board.LocationChess)
                 {
                     // int positionX = (8 * (int)_playerSide - item.Key.X) * this.GrilleTextureActualWidth / 8;
@@ -225,6 +242,10 @@ namespace MultiplayerChessGame.Client
             {
                 // An unhandled exception of type 'System.InvalidOperationException' occurred in System.Private.CoreLib.dll: 'Collection was modified; enumeration operation may not execute.'
                 // ignore
+            }
+            finally
+            {
+                _state.Board.Availability = true;
             }
         }
 

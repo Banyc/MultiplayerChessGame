@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Runtime.CompilerServices;
 using System;
 using System.Drawing;
@@ -19,8 +20,9 @@ namespace MultiplayerChessGame.Shared.Models
         }
     }
 
-    public class GameBoard
+    public partial class GameBoard
     {
+        public bool Availability { get; set; } = true;
         public Dictionary<Point, Chess> LocationChess { get; set; }
         // controlled by ChessMove instruction
         public Point? PreviousLocation { get; set; }
@@ -28,37 +30,57 @@ namespace MultiplayerChessGame.Shared.Models
         // controlled by ChessChange instruction
         public Point? NewChessLocation { get; set; }
 
+        // Without rule
         public void AddChessMove(ChessMove chessMove)
         {
-            if (!this.LocationChess.ContainsKey(chessMove.From))
+            this.Availability = false;
+            try
             {
-                throw new InvalidChessOperation();
-                // return;
+                PerformChessMove(chessMove);
+                if (!this.LocationChess.ContainsKey(chessMove.From))
+                {
+                    throw new InvalidChessOperation();
+                    // return;
+                }
+                Chess movingChess = this.LocationChess[chessMove.From];
+                this.LocationChess.Remove(chessMove.From);
+                this.LocationChess[chessMove.To] = movingChess;
+                this.PreviousLocation = chessMove.From;
+                this.CurrentLocation = chessMove.To;
+                this.NewChessLocation = null;
             }
-            Chess movingChess = this.LocationChess[chessMove.From];
-            this.LocationChess.Remove(chessMove.From);
-            this.LocationChess[chessMove.To] = movingChess;
-            this.PreviousLocation = chessMove.From;
-            this.CurrentLocation = chessMove.To;
-            this.NewChessLocation = null;
+            finally
+            {
+                this.Availability = true;
+            }
         }
 
+        // Without rule
         public void AddChessChange(ChessChange chessChange)
         {
-            if (chessChange.NewChess == null)
+            this.Availability = false;
+            try
             {
-                // remove key-value
-                if (this.LocationChess.ContainsKey(chessChange.Position))
+                PerformChessChange(chessChange);
+                if (chessChange.NewChess == null)
                 {
-                    this.LocationChess.Remove(chessChange.Position);
+                    // remove key-value
+                    if (this.LocationChess.ContainsKey(chessChange.Position))
+                    {
+                        this.LocationChess.Remove(chessChange.Position);
+                    }
                 }
+                else
+                {
+                    // change value
+                    this.LocationChess[chessChange.Position] = chessChange.NewChess;
+                }
+                this.NewChessLocation = chessChange.Position;
             }
-            else
+            finally
             {
-                // change value
-                this.LocationChess[chessChange.Position] = chessChange.NewChess;
+                this.Availability = true;
             }
-            this.NewChessLocation = chessChange.Position;
         }
     }
 }
