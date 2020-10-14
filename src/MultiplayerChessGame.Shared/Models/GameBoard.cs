@@ -30,7 +30,6 @@ namespace MultiplayerChessGame.Shared.Models
         // controlled by ChessChange instruction
         public Point? NewChessLocation { get; set; }
 
-        // Without rule
         public void AddChessMove(ChessMove chessMove)
         {
             this.Availability = false;
@@ -55,7 +54,6 @@ namespace MultiplayerChessGame.Shared.Models
             }
         }
 
-        // Without rule
         public void AddChessChange(ChessChange chessChange)
         {
             this.Availability = false;

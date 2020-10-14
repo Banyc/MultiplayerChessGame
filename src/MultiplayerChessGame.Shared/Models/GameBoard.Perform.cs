@@ -75,6 +75,10 @@ namespace MultiplayerChessGame.Shared.Models
             }
             else if (IsEnPassant(chess, instruction.From, instruction.To))
             {
+                if (IsChecked(thisSide, this.LocationChess, instruction))
+                {
+                    throw new InvalidChessOperation();
+                }
                 // remove the killed pawn
                 switch (chess.Side)
                 {
