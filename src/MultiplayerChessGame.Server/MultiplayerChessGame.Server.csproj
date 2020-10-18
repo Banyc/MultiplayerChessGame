@@ -7,6 +7,12 @@
   <ItemGroup>
     <PackageReference Include="NetCoreServer" Version="3.0.20" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="Dockerfile" CopyToOutputDirectory="Always" />
+    <None Include="docker-compose.yml" CopyToOutputDirectory="Always" />
+    <None Include="start.sh" CopyToOutputDirectory="Always" />
+  </ItemGroup>
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
