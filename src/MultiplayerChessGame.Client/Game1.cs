@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -81,7 +83,13 @@ namespace MultiplayerChessGame.Client
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _client = new GameClientService(_state);
+            // build configuration
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", false)
+                .AddJsonFile("appsettings.local.json", true)  // this config will overwrite the previous one if conflicting
+                .Build();
+            _client = new GameClientService(_state, configuration.GetSection("GameClientService"));
 
             base.Initialize();
         }
