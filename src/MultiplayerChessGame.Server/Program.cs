@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MultiplayerChessGame.Server.Models;
 using MultiplayerChessGame.Server.Services;
 
 namespace MultiplayerChessGame.Server
@@ -20,10 +21,18 @@ namespace MultiplayerChessGame.Server
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args).ConfigureServices(ConfigureServices);
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(builder => {
+                    builder.AddJsonFile("appsettings.local.json", true);
+                })
+                .ConfigureServices(ConfigureServices);
 
-        private static void ConfigureServices(IServiceCollection services)
+        private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<GameServerServiceOptions>(
+                context.Configuration.GetSection("GameServerService")
+            );
             services.AddHostedService<GameServerService>();
             services.AddSingleton<ChessGameManagerService>();
         }

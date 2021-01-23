@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 using System.Threading;
+using MultiplayerChessGame.Server.Models;
+using Microsoft.Extensions.Options;
 
 namespace MultiplayerChessGame.Server.Services
 {
@@ -11,12 +13,11 @@ namespace MultiplayerChessGame.Server.Services
     {
         private readonly GameServer _gameServer;
         private readonly ILogger<GameServerService> _logger;
-        public GameServerService(ChessGameManagerService gameManager, ILogger<GameServerService> logger)
+        public GameServerService(ChessGameManagerService gameManager, IOptions<GameServerServiceOptions> options, ILogger<GameServerService> logger)
         {
             _logger = logger;
-            int port = 18652;
-            _gameServer = new GameServer(IPAddress.Any, port, gameManager);
-            _logger.LogInformation($"Started on port {port}");
+            _gameServer = new GameServer(IPAddress.Any, options.Value.Port, gameManager);
+            _logger.LogInformation($"Started on port {options.Value.Port}");
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

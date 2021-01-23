@@ -12,6 +12,10 @@
     <None Include="Dockerfile" CopyToOutputDirectory="Always" />
     <None Include="docker-compose.yml" CopyToOutputDirectory="Always" />
     <None Include="start.sh" CopyToOutputDirectory="Always" />
+
+    <EmbeddedResource Remove="appsettings.local.json" />
+    <Content Remove="appsettings.local.json" />
+    <None Remove="appsettings.local.json" />
   </ItemGroup>
 
   <PropertyGroup>
