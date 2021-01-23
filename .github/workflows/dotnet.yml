@@ -1,0 +1,55 @@
+name: .NET
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+    - name: publish MultiplayerChessGame.Server.win-x64
+      run: dotnet publish src/MultiplayerChessGame.Server -r win-x64 --no-self-contained
+    - name: publish MultiplayerChessGame.Server.linux-x64
+      run: dotnet publish src/MultiplayerChessGame.Server -r linux-x64 --no-self-contained
+    - name: Upload MultiplayerChessGame.Server win-x64 Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: MultiplayerChessGame.Server.win-x64
+        path: src/MultiplayerChessGame.Server/bin/Debug/netcoreapp3.1/win-x64/publish/
+    - name: Upload MultiplayerChessGame.Server linux-x64 Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: MultiplayerChessGame.Server.linux-x64
+        path: src/MultiplayerChessGame.Server/bin/Debug/netcoreapp3.1/linux-x64/publish/
+
+    - name: publish MultiplayerChessGame.Client.win-x64
+      run: dotnet publish src/MultiplayerChessGame.Client -r win-x64 --no-self-contained
+    - name: publish MultiplayerChessGame.Client.linux-x64
+      run: dotnet publish src/MultiplayerChessGame.Client -r linux-x64 --no-self-contained
+    - name: Upload MultiplayerChessGame.Client win-x64 Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: MultiplayerChessGame.Client.win-x64
+        path: src/MultiplayerChessGame.Client/bin/Debug/netcoreapp3.1/win-x64/publish/
+    - name: Upload MultiplayerChessGame.Client linux-x64 Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: MultiplayerChessGame.Client.linux-x64
+        path: src/MultiplayerChessGame.Client/bin/Debug/netcoreapp3.1/linux-x64/publish/
